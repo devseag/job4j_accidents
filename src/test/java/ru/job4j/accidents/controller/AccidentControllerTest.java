@@ -18,9 +18,9 @@ import ru.job4j.accidents.Main;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.service.AccidentService;
-/**import static org.junit.Assert.assertThat;*/
+import ru.job4j.accidents.model.*;
+import ru.job4j.accidents.service.*;
+
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class AccidentControllerTest {
 
     @MockBean
-    private AccidentService accidentService;
+    private SpringDataAccidentService accidentService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,6 @@ class AccidentControllerTest {
                 .andExpect(view().name("accidents/all"));
     }
 
-    @Disabled
     @Test
     @WithMockUser
     public void shouldReturnNewAccident() throws Exception {
@@ -58,7 +57,7 @@ class AccidentControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
         ArgumentCaptor<Accident> argument = ArgumentCaptor.forClass(Accident.class);
-        verify(accidentService).save(argument.capture());
+        verify(accidentService).create(argument.capture());
         assertThat(argument.getValue().getName()).isEqualTo("Name1");
     }
 
