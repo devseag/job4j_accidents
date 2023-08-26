@@ -11,16 +11,20 @@ import java.util.concurrent.atomic.*;
 public class MemAccidentRepository implements AccidentRepository {
 
     private final AtomicInteger nextId = new AtomicInteger(1);
-    private final ConcurrentHashMap<Integer, Accident> accidents = new ConcurrentHashMap<>();
-    private final List<AccidentType> types = new ArrayList<>();
+    private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
+    private final Map<Integer, AccidentType> types = new ConcurrentHashMap<>();
+    private final Map<Integer, Rule> rules = new ConcurrentHashMap<>();
 
     public MemAccidentRepository() {
-        save(new Accident(0, "name1", "text1", "address1", new AccidentType()));
-        save(new Accident(0, "name2", "text2", "address2", new AccidentType()));
-        save(new Accident(0, "name3", "text3", "address3", new AccidentType()));
-        types.add(new AccidentType(1, "Dve mashiny"));
-        types.add(new AccidentType(2, "Mashina i chelovek"));
-        types.add(new AccidentType(3, "Mashina i velosiped"));
+        save(new Accident(0, "name1", "text1", "address1", new AccidentType(), new HashSet<>()));
+        save(new Accident(0, "name2", "text2", "address2", new AccidentType(), new HashSet<>()));
+        save(new Accident(0, "name3", "text3", "address3", new AccidentType(), new HashSet<>()));
+        types.put(1, new AccidentType(1, "Dve mashiny"));
+        types.put(2, new AccidentType(2, "Mashina i chelovek"));
+        types.put(3, new AccidentType(3, "Mashina i velosiped"));
+        rules.put(1, new Rule(1, "Stat'ja. 1"));
+        rules.put(2, new Rule(2, "Stat'ja. 2"));
+        rules.put(3, new Rule(3, "Stat'ja. 3"));
     }
 
     @Override
@@ -32,7 +36,7 @@ public class MemAccidentRepository implements AccidentRepository {
 
     @Override
     public void update(Accident accident) {
-        accidents.put(accident.getId(), accident);
+        accidents.replace(accident.getId(), accident);
     }
 
     @Override
@@ -47,7 +51,12 @@ public class MemAccidentRepository implements AccidentRepository {
 
     @Override
     public Collection<AccidentType> getAccidentTypes() {
-        return types;
+        return types.values();
+    }
+
+    @Override
+    public Collection<Rule> getRules() {
+        return rules.values();
     }
 
 }

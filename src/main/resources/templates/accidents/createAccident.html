@@ -45,11 +45,19 @@
                         <input type="text" class="form-control" name="address" id="address">
                     </div>
                     <div class="form-group">
-                        <label for="type.id">Тип</label>
+                        <label for="type.id">Tip</label>
                         <select class="form-control" id="type.id"  name="type.id">
                             <option th:each="type: ${types}"
                                     th:text="${type.name}"
                                     th:value="${type.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type.id" name="rIds">Stat'ja</label>
+                        <select class="form-control" id="rIds" name="rIds" multiple>
+                            <option th:each="rule: ${rules}"
+                                    th:text="${rule.name}"
+                                    th:value="${rule.id}"></option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Sohranit'</button>
@@ -59,4 +67,4 @@
     </div>
 </div>
 </body>
-</html>а
+</html>
