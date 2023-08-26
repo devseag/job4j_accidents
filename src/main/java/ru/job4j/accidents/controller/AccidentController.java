@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.service.*;
+import ru.job4j.accidents.model.Accident;
 
 @Controller
 @RequestMapping("/accidents")
@@ -17,5 +18,22 @@ public class AccidentController {
     public String getAll(Model model) {
         model.addAttribute("accidents", accidentService.findAll());
         return "accidents/all";
+    }
+
+    @GetMapping("/createAccident")
+    public String viewCreateAccident() {
+        return "accidents/createAccident";
+    }
+
+    @PostMapping("/saveAccident")
+    public String save(@ModelAttribute Accident accident, Model model) {
+        accidentService.save(accident);
+        return "redirect:/accidents/all";
+    }
+
+    @GetMapping("/formUpdateAccident")
+    public String update(@RequestParam("id") int id, Model model) {
+        model.addAttribute("accident", accidentService.findById(id).get());
+        return "accidents/editAccident";
     }
 }
